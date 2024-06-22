@@ -26,14 +26,17 @@ OUTPUT_PATH = out
 
 # 指定链接器（ld）将代码段（text section）放置在内存中的特定地址
 # 0x80000000为riscv内存的起始地址
-LDFLAGS = -Ttext=0x80000000
+# LDFLAGS = -Ttext=0x80000000
 
 SRCS_ASM = \
 	start.S \
+	mem.S \
 
 SRCS_C = \
 	kernel.c \
 	uart.c \
+	page.c \
+	printf.c \
 
 # SRCS_ASM & SRCS_C are defined in the Makefile of each project.
 OBJS_ASM := $(addprefix ${OUTPUT_PATH}/, $(patsubst %.S, %.o, ${SRCS_ASM}))
@@ -87,3 +90,10 @@ code: all
 .PHONY : clean
 clean:
 	@${RM} ${OUTPUT_PATH}
+
+
+# riscv64-unknown-elf-gcc  -nostdlib -fno-builtin -g -Wall -march=rv32g -mabi=ilp32 -c -o out/start.o start.S
+# riscv64-unknown-elf-gcc  -nostdlib -fno-builtin -g -Wall -march=rv32g -mabi=ilp32 -c -o out/kernel.o kernel.c
+# riscv64-unknown-elf-gcc  -nostdlib -fno-builtin -g -Wall -march=rv32g -mabi=ilp32 -c -o out/uart.o uart.c
+# riscv64-unknown-elf-gcc -nostdlib -fno-builtin -g -Wall -march=rv32g -mabi=ilp32 -Ttext=0x80000000 -o out/os.elf out/start.o out/kernel.o out/uart.o
+# riscv64-unknown-elf-objcopy -O binary out/os.elf out/os.bin

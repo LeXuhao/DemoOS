@@ -3,10 +3,10 @@
 	# size of each hart's stack is 1024 bytes
 	.equ	STACK_SIZE, 1024
 
-	.global	_begin
+	.global	_start
 
 	.text
-_begin:
+_start:
 	# park harts with id != 0
 	csrr	t0, mhartid		# read current hart id
 	                        #读取当前处理器的 hart ID，存储到寄存器 t0 中
